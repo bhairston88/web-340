@@ -4,7 +4,7 @@
 ; Author: Professor Massoud
 ; Date: 15 August 2020
 ; Modified By: Brooklyn Hairston
-; Description: Demonstrates
+; Description: Demonstrates how to create an express application
 ;===========================================
 */
 
@@ -28,3 +28,5 @@ app.use(function(request, response) {
 });
 
 http.createServer(app).listen(8080);
+
+//end program
