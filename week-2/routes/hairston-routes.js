@@ -4,7 +4,7 @@
 ; Author: Professor Massoud
 ; Date: 15 August 2020
 ; Modified By: Brooklyn Hairston
-; Description: Demonstrates routing in nodeggi
+; Description: Demonstrates routing in node
 ;===========================================
 */
 
