@@ -43,7 +43,7 @@ app.get("/ok", function(request, response) {
 });
 
 //return 501 status code
-app.get("not-implemented", function(request, response) {
+app.get("/not-implemented", function(request, response) {
     response.status(501);
     response.json({
         error: "The page couldn't be implemented, sorry."
