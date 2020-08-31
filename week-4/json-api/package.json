@@ -1,0 +1,8 @@
+{
+    "name": "json-apis",
+    "author": "Brooklyn Hairston",
+    "privacy": true,
+    "dependencies": {
+        "express": "^4.17.1"
+    }
+}
