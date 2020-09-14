@@ -39,13 +39,18 @@ app.set("view engine", "ejs");
 
 app.use(logger("short"));
 
+//Tell express to use the 'public' directory
+
+app.use(express.static(__dirname +"/public"));
+
 //returns the index.ejs page
 
 app.get("/", function(request, response) {
     response.render("index", {
-        title: "Home page"
+        title: "Rogue Design"
     });
 });
+
 
 //Creates a new server to listen to the port 8080
 
