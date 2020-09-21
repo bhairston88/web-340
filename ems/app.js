@@ -22,6 +22,24 @@ var http = require("http");
 var path = require("path");
 var logger = require("morgan");
 const { appendFileSync } = require('fs');
+var mongoose = require("mongoose");
+var Employee = require("./models/employee");
+
+//database connection string to MongoDB Atlas
+var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/<dbname>?retryWrites=true&w=majority";
+
+//mongoose connection
+mongoose.connect(mongoDB, {
+    useMongoClient: true
+});
+
+mongoose.Promise = global.Promise;
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connection error: "));
+
+db.once("open", function() {
+    console.log("Application connected to mLab MongoDB instance");
+});
 
 //initialize application
 
@@ -42,6 +60,12 @@ app.use(logger("short"));
 //Tell express to use the 'public' directory
 
 app.use(express.static(__dirname +"/public"));
+
+//create an employee model
+var employee = new Employee( {
+    firstName: "John",
+    lastName: "Doe"
+});
 
 //returns the index.ejs page
 
