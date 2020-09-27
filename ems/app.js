@@ -2,7 +2,7 @@
 ============================================
 ; Title: app.js
 ; Author: Professor Massoud
-; Date:   11 September 2020
+; Date:   27 September 2020
 ; Modified By: Brooklyn Hairston
 ; Description: Demonstrates EJS Layouts
 ;===========================================
@@ -24,6 +24,7 @@ var logger = require("morgan");
 const { appendFileSync } = require('fs');
 var mongoose = require("mongoose");
 var Employee = require("./models/employee");
+var helmet = require("helmet");
 
 //database connection string to MongoDB Atlas
 var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/<dbname>?retryWrites=true&w=majority";
@@ -53,9 +54,10 @@ app.set("views", path.resolve(__dirname, "views"));
 
 app.set("view engine", "ejs");
 
-//Tell express to use the logger
+//Use statements
 
 app.use(logger("short"));
+app.use(helmet.xssFilter());
 
 //Tell express to use the 'public' directory
 
@@ -68,13 +70,18 @@ var employee = new Employee( {
 });
 
 //returns the index.ejs page
-
 app.get("/", function(request, response) {
     response.render("index", {
         title: "Rogue Design"
     });
 });
 
+//http calls
+app.get("/", function(request, response) {
+    response.render("index", {
+        message: "XSS Prevention Example"
+    });
+});
 
 //Creates a new server to listen to the port 8080
 
