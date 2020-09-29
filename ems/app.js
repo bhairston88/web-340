@@ -30,7 +30,7 @@ var cookieParser = require("cookie-parser");
 var csrf = require("csurf");
 
 //database connection string to MongoDB Atlas
-var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/<dbname>?retryWrites=true&w=majority";
+var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/ems?retryWrites=true&w=majority";
 
 //mongoose connection
 mongoose.connect(mongoDB, {
@@ -111,7 +111,38 @@ app.get("/", function(request, response) {
 
 app.post("/process", function(request, response) {
     console.log(request.body.txtName);
+    if (!request.body.txtName) {
+        response.status(400).send("Entries must have a name");
+    return;
+    }
+
+    //get the request's form data
+    var employeeName = request.body.txtName;
+    console.log(employeeName);
+
+    //create an employee model
+    var employee = new Employee( {
+        name: employeeName
+    });
+
+    //save
+    employee.save(function(error) {
+        if (error) throw error; 
+        console.log(employeeName + "saved successfully!");
+    });
+
     response.redirect("/");
+});
+
+app.get("/list", function(request, response) {
+    Employee.find({}, function(error, employees) {
+        if (error) throw error;
+
+        response.render("list", {
+            title: "Employee List",
+            employees: employees
+        });
+    });
 });
 
 //Creates a new server to listen to the port 8080
