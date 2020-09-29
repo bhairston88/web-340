@@ -25,6 +25,9 @@ const { appendFileSync } = require('fs');
 var mongoose = require("mongoose");
 var Employee = require("./models/employee");
 var helmet = require("helmet");
+var bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
+var csrf = require("csurf");
 
 //database connection string to MongoDB Atlas
 var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/<dbname>?retryWrites=true&w=majority";
@@ -42,6 +45,9 @@ db.once("open", function() {
     console.log("Application connected to mLab MongoDB instance");
 });
 
+//sets up CSRF protection
+let csrfProtection = csrf({ cookie: true });
+
 //initialize application
 
 var app = express();
@@ -57,6 +63,19 @@ app.set("view engine", "ejs");
 //Use statements
 
 app.use(logger("short"));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(cookieParser());
+app.use(csrfProtection);
+app.use(function(request, response, next) {
+    var token = request.csrfToken();
+    response.cookie('XSRF-TOKEN', token);
+    response.locals.csrfToken= token;
+    next();
+});
+
 app.use(helmet.xssFilter());
 
 //Tell express to use the 'public' directory
@@ -81,6 +100,18 @@ app.get("/", function(request, response) {
     response.render("index", {
         message: "XSS Prevention Example"
     });
+});
+
+//routing
+app.get("/", function(request, response) {
+    response.render("new", {
+        message: "New Employee Entry Page"
+    });
+});
+
+app.post("/process", function(request, response) {
+    console.log(request.body.txtName);
+    response.redirect("/");
 });
 
 //Creates a new server to listen to the port 8080
