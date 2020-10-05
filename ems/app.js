@@ -59,6 +59,7 @@ app.set("views", path.resolve(__dirname, "views"));
 //Tell express to use the ejs view engine
 
 app.set("view engine", "ejs");
+app.set("port", process.env.PORT||8080);
 
 //Use statements
 
@@ -84,14 +85,14 @@ app.use(express.static(__dirname +"/public"));
 
 
 //returns the index.ejs page
-app.get("/", function(request, response) {
+app.get("/index", function(request, response) {
     response.render("index", {
     title: "Rogue Design"
     })
 });
 
 //http calls
-app.get("/", function(request, response) {
+app.get("/index", function(request, response) {
     response.render("index", {
         message: "XSS Prevention Example"
     });
@@ -174,7 +175,7 @@ app.post("/process", function(request, response) {
                     employee: employee
                 })
             } else {
-                response.redirect("/")
+                response.redirect("/index")
             }
             }
         })
@@ -184,8 +185,8 @@ app.post("/process", function(request, response) {
 
 //Creates a new server to listen to the port 8080
 
-http.createServer(app).listen(8080, function() {
-    console.log("Application started on port 8080!");
+http.createServer(app).listen(app.get("port"), function() {
+    console.log("Application started on port" + app.get("port"));
 });
 
 //end program
