@@ -157,7 +157,7 @@ app.post("/process", function(request, response) {
         }
     });
     });
-
+/** 
     app.get("/view/:queryFirstNameLastName", function (request, response) {
         var queryFirstName = request.params.queryFirstName 
         var queryLastName = request.params.queryLastName;
@@ -181,7 +181,7 @@ app.post("/process", function(request, response) {
         })
     });
 
-
+*/
 
 //Creates a new server to listen to the port 8080
 
