@@ -85,14 +85,14 @@ app.use(express.static(__dirname +"/public"));
 
 
 //returns the index.ejs page
-app.get("/index", function(request, response) {
+app.get("/", function(request, response) {
     response.render("index", {
     title: "Rogue Design"
     })
 });
 
 //http calls
-app.get("/index", function(request, response) {
+app.get("/", function(request, response) {
     response.render("index", {
         message: "XSS Prevention Example"
     });
