@@ -30,7 +30,7 @@ var cookieParser = require("cookie-parser");
 var csrf = require("csurf");
 
 //database connection string to MongoDB Atlas
-var mongoDB = "mongodb+srv://bhairston:Fat1810Bun!!@buwebdev-cluster-1.iztjy.mongodb.net/ems?retryWrites=true&w=majority";
+var mongoDB = "mongodb+srv://bhairston:Fat1810Bun@buwebdev-cluster-1.iztjy.mongodb.net/ems?retryWrites=true&w=majority";
 
 //mongoose connection
 mongoose.connect(mongoDB, {
@@ -82,17 +82,12 @@ app.use(helmet.xssFilter());
 
 app.use(express.static(__dirname +"/public"));
 
-//create an employee model
-var employee = new Employee( {
-    firstName: "John",
-    lastName: "Doe"
-});
 
 //returns the index.ejs page
 app.get("/", function(request, response) {
     response.render("index", {
-        title: "Rogue Design"
-    });
+    title: "Rogue Design"
+    })
 });
 
 //http calls
@@ -103,47 +98,89 @@ app.get("/", function(request, response) {
 });
 
 //routing
-app.get("/", function(request, response) {
+//redirects to 'new' page
+app.get("/new", function(request, response) {
     response.render("new", {
+        title: "Rogue Design",
         message: "New Employee Entry Page"
     });
 });
 
+//redirects to 'list' page
+app.get("/list", function(request, response) {
+    Employee.find( {}, function(error, employees) {
+        if (error) {
+            console.log(error);
+            throw error;
+        } else {
+            console.log(employees)
+            response.render("list", {
+                title: "Employee List",
+                employees: employees
+            })
+        }
+    });
+});
+
+//form submission page
 app.post("/process", function(request, response) {
-    console.log(request.body.txtName);
-    if (!request.body.txtName) {
-        response.status(400).send("Entries must have a name");
+    console.log(request.body.txtFirstName);
+    if (!request.body.txtFirstName) {
+        response.status(400).send("Entries must have a first name!");
     return;
+    } else if (!request.body.txtLastName) {
+        response.status(400).send("Entries must have a last name!");
+        return;
     }
 
+
     //get the request's form data
-    var employeeName = request.body.txtName;
-    console.log(employeeName);
+    var employeeFirstName = request.body.txtFirstName;
+    var employeeLastName = request.body.txtLastName;
+    console.log(employeeFirstName + employeeLastName);
 
     //create an employee model
-    var employee = new Employee( {
-        name: employeeName
+    let employee = new Employee( {
+        firstName: employeeFirstName,
+        lastName: employeeLastName
     });
 
     //save
     employee.save(function(error) {
-        if (error) throw error; 
-        console.log(employeeName + "saved successfully!");
+        if (error) {
+            console.log(error);
+        throw error; 
+        } else {
+        console.log(employeeFirstName + " " + employeeLastName + " " + "saved successfully!");
+        response.redirect("/list");
+        }
+    });
     });
 
-    response.redirect("/");
-});
+    app.get("/view/:queryFirstNameLastName", function (request, response) {
+        var queryFirstName = request.params.queryFirstName 
+        var queryLastName = request.params.queryLastName;
 
-app.get("/list", function(request, response) {
-    Employee.find({}, function(error, employees) {
-        if (error) throw error;
-
-        response.render("list", {
-            title: "Employee List",
-            employees: employees
-        });
+        Employee.find({"firstName": queryFirstName, "lastName": queryLastName}, function(error, employees) {
+            if(error) {
+                console.log(error);
+                throw error;
+            } else {
+                console.log(employees);
+            
+            if (employees.length > 0) {
+                response.render("view", {
+                    title: "Employee Record",
+                    employee: employee
+                })
+            } else {
+                response.redirect("/")
+            }
+            }
+        })
     });
-});
+
+
 
 //Creates a new server to listen to the port 8080
 

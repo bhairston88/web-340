@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include ("header") %>
+
+<body>
+    <%- include ("navbar") %>
+
+    <div role="main" class="container" style="width: 50%;">
+    <br /><br />
+
+    <h2>Employee Details</h2>
+    <br />
+    <div>
+        <div class="form-group">
+            <label for="txtFirstName">First Name:</label>
+            <input type="text" class="form-control" id="txtFirstName" readonly value="<%= employee[0].firstName %>" name="txtFirstName" />
+            <label for="txtLastName">Last Name: </label>
+            <input type="text" class="form-control" id="txtLastName" readonly value="<%= employee[0].lastName %>" name="txtLastName" />
+        </div>
+    </div>
+
+
+<br /><br />
+
+<a href="/">&larr; OK</a>
+</div>
+
+<%- include ("scripts")
+</body>
+</html>
