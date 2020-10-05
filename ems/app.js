@@ -9,9 +9,9 @@
 */
 
 //header
-const header = require('../hairston-header')
+//const header = require('../hairston-header')
 
-console.log(header.display('Brooklyn','Hairston','EMS'))
+//console.log(header.display('Brooklyn','Hairston','EMS'))
 
 //start program
 
