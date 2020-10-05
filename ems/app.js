@@ -172,10 +172,10 @@ app.post("/process", function(request, response) {
             if (employees.length > 0) {
                 response.render("view", {
                     title: "Employee Record",
-                    employee: employee
+                    employee: employees
                 })
             } else {
-                response.redirect("/index")
+                response.redirect("/")
             }
             }
         })
